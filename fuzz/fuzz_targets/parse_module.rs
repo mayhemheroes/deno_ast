@@ -8,46 +8,44 @@ use deno_ast::MediaType;
 use deno_ast::ParseParams;
 use deno_ast::SourceTextInfo;
 
-#[derive(Arbitrary, Debug, Clone)]
-struct FuzzData {
-    source_code: String,
-    media_type_id: u8,
-    capture_tokens: bool,
-    scope_analysis: bool,
-}
+/*
+use deno_ast::parse_module;
+use deno_ast::MediaType;
+use deno_ast::ParseParams;
+use deno_ast::SourceTextInfo;
 
-fn to_media_type(id: u8) -> MediaType {
-    match id % 15 {
-        0 => MediaType::JavaScript,
-        1 => MediaType::Jsx,
-        2 => MediaType::Mjs,
-        3 => MediaType::Cjs,
-        4 => MediaType::TypeScript,
-        5 => MediaType::Mts,
-        6 => MediaType::Cts,
-        7 => MediaType::Dts,
-        8 => MediaType::Dmts,
-        9 => MediaType::Dcts,
-        10 => MediaType::Tsx,
-        11 => MediaType::Json,
-        12 => MediaType::Wasm,
-        13 => MediaType::TsBuildInfo,
-        14 => MediaType::SourceMap,
-        _ => MediaType::Unknown,
-    }
-}
+let source_text = "class MyClass {}";
+let text_info = SourceTextInfo::new(source_text.into());
+let parsed_source = parse_module(ParseParams {
+  specifier: "file:///my_file.ts".to_string(),
+  media_type: MediaType::TypeScript,
+  text_info,
+  capture_tokens: true,
+  maybe_syntax: None,
+  scope_analysis: false,
+}).expect("should parse");
 
-fuzz_target!(|data: FuzzData| {
-    let text_info = SourceTextInfo::new(data.source_code.into());
-    let media_type = to_media_type(data.media_type_id);
+// returns the comments
+parsed_source.comments();
+// returns the tokens if captured
+parsed_source.tokens();
+// returns the module (AST)
+parsed_source.module();
+// returns the `SourceTextInfo`
+parsed_source.text_info();
+ */
+
+fuzz_target!(|data: &[u8]| {
+    let source_text = String::from_utf8_lossy(data);
+    let text_info = SourceTextInfo::new(source_text.into());
 
     let parse_params = ParseParams {
-        specifier: "file:///test.ts".to_string(),
-        media_type,
+        specifier: "file:///my_file.ts".to_string(),
+        media_type: MediaType::TypeScript,
         text_info,
-        capture_tokens: data.capture_tokens,
-        scope_analysis: data.scope_analysis,
+        capture_tokens: true,
         maybe_syntax: None,
+        scope_analysis: false,
     };
 
     let _ = parse_module(parse_params);
