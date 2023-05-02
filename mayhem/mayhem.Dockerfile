@@ -11,8 +11,5 @@ RUN cargo +nightly fuzz build
 # Package stage
 FROM ubuntu:latest AS PACKAGE
 
-# Copy the corpora to the final image
-
-
 # Copy the fuzzers to the final image
 COPY --from=BUILDER /src/./fuzz/target/x86_64-unknown-linux-gnu/release/fuzz_* /fuzzers/
