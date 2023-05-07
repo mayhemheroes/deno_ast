@@ -1,4 +1,4 @@
-project: PROJECT_NAME
+project: deno_ast
 target: parse_module
 duration: 600
 cmds:
