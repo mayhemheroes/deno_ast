@@ -1,0 +1,5 @@
+project: deno_ast
+target: parse_module
+duration: 600
+cmds:
+    - cmd: /fuzzers/fuzz_parse_module
