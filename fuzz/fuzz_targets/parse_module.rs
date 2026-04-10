@@ -1,21 +1,19 @@
 #![no_main]
 
-use arbitrary::Arbitrary;
 use libfuzzer_sys::fuzz_target;
 
 use deno_ast::parse_module;
 use deno_ast::MediaType;
+use deno_ast::ModuleSpecifier;
 use deno_ast::ParseParams;
-use deno_ast::SourceTextInfo;
 
 fuzz_target!(|data: &[u8]| {
     let source_text = String::from_utf8_lossy(data);
-    let text_info = SourceTextInfo::new(source_text.into());
 
     let parse_params = ParseParams {
-        specifier: "file:///my_file.ts".to_string(),
+        specifier: ModuleSpecifier::parse("file:///my_file.ts").unwrap(),
         media_type: MediaType::TypeScript,
-        text_info,
+        text: source_text.as_ref().into(),
         capture_tokens: true,
         maybe_syntax: None,
         scope_analysis: false,
