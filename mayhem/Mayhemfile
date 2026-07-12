@@ -1,0 +1,14 @@
+# Ported from the pre-two-branch integration (archive/original-main:
+# mayhem/parse_module.mayhemfile). Same target name; harness moved (additively)
+# from fuzz/fuzz_targets/parse_module.rs to mayhem/fuzz/fuzz_targets/parse_module.rs.
+project: deno_ast
+target: parse_module
+
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/parse_module/testsuite
+
+cmds:
+  # libFuzzer binary; Mayhem feeds inputs on stdin (no @@ = stdin input).
+  - cmd: /mayhem/parse_module
+    libfuzzer: true
